@@ -1,0 +1,6 @@
+framework module Pods_GraySky {
+  umbrella header "Pods-GraySky-umbrella.h"
+
+  export *
+  module * { export * }
+}
