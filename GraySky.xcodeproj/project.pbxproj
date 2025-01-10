@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		5BBF5ABB1237697D0BF8A311 /* Pods_GraySky_GraySkyUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FDD10655A3E61C291086726 /* Pods_GraySky_GraySkyUITests.framework */; };
+		85993D2E2D31D3E0004DE7E7 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 85993D2D2D31D3E0004DE7E7 /* README.md */; };
+		85993D2F2D31D3E0004DE7E7 /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = 85993D2C2D31D3E0004DE7E7 /* LICENSE.txt */; };
 		92137DEBE5898AE9E0AF26D8 /* Pods_GraySkyTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F452019810BC3E6B9928AB21 /* Pods_GraySkyTests.framework */; };
 		D36ED8A17979E0BF50EA696C /* Pods_GraySky.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8528B6C4790CDA793CD90E02 /* Pods_GraySky.framework */; };
 /* End PBXBuildFile section */
@@ -39,6 +41,8 @@
 		85993C3C2D31D241004DE7E7 /* GraySky.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GraySky.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		85993C522D31D243004DE7E7 /* GraySkyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GraySkyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		85993C5C2D31D243004DE7E7 /* GraySkyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GraySkyUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		85993D2C2D31D3E0004DE7E7 /* LICENSE.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
+		85993D2D2D31D3E0004DE7E7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		8FDD10655A3E61C291086726 /* Pods_GraySky_GraySkyUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GraySky_GraySkyUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F452019810BC3E6B9928AB21 /* Pods_GraySkyTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GraySkyTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC5317AA4BC764D01BF0C4C7 /* Pods-GraySky-GraySkyUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GraySky-GraySkyUITests.release.xcconfig"; path = "Target Support Files/Pods-GraySky-GraySkyUITests/Pods-GraySky-GraySkyUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -65,15 +69,11 @@
 		};
 		85993C552D31D243004DE7E7 /* GraySkyTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = GraySkyTests;
 			sourceTree = "<group>";
 		};
 		85993C5F2D31D243004DE7E7 /* GraySkyUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = GraySkyUITests;
 			sourceTree = "<group>";
 		};
@@ -117,7 +117,6 @@
 				60AAA199546DF7D545033581 /* Pods-GraySkyTests.debug.xcconfig */,
 				15A0EDB19CAC70E4F63096BA /* Pods-GraySkyTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -134,6 +133,8 @@
 		85993C332D31D241004DE7E7 = {
 			isa = PBXGroup;
 			children = (
+				85993D2C2D31D3E0004DE7E7 /* LICENSE.txt */,
+				85993D2D2D31D3E0004DE7E7 /* README.md */,
 				85993C3E2D31D241004DE7E7 /* GraySky */,
 				85993C552D31D243004DE7E7 /* GraySkyTests */,
 				85993C5F2D31D243004DE7E7 /* GraySkyUITests */,
@@ -272,6 +273,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				85993D2E2D31D3E0004DE7E7 /* README.md in Resources */,
+				85993D2F2D31D3E0004DE7E7 /* LICENSE.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
