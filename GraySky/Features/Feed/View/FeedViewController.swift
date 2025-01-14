@@ -86,17 +86,41 @@ extension FeedViewController{
     func setupTabBar(){
         tabBarItem.image = UIImage(systemName: "house.fill")
     }
-    func setupBarButton(){
+    func setupBarButton(){/*
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem.init(image: UIImage(named:"asian"), style:.plain, target: self, action: #selector(barButtonProfileClicked))
+        self.navigationItem.title = "GraySky"
         self.navigationItem.rightBarButtonItem = UIBarButtonItem.init(image: UIImage(systemName: "plus.app"), style: .done, target: self, action: #selector(toNewEntry))
-        self.navigationItem.title="GraySky"
-        /*
-        let img = UIImage(named: "asian")!.withRenderingMode(.alwaysOriginal)
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem.init(image: img, style: .plain, target: self, action: nil)
         */
+        
+        let profileImageView = UIImageView(image: UIImage(named: "asian"))
+        profileImageView.contentMode = .scaleAspectFill
+        profileImageView.clipsToBounds = true
+        profileImageView.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
+        let profileButton = UIButton(type: .custom)
+        profileButton.addSubview(profileImageView)
+        profileButton.frame = profileImageView.frame
+        profileButton.addTarget(self, action: #selector(profileClicked), for: .touchUpInside)
+        
+        let profileBarButton = UIBarButtonItem(customView: profileButton)
+        self.navigationItem.leftBarButtonItem = profileBarButton
+        
+        let appIconImageView = UIImageView(image: UIImage(named: "graysky"))
+        appIconImageView.contentMode = .scaleAspectFit
+        appIconImageView.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
+        self.navigationItem.titleView = appIconImageView
+        
+       
+        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(toNewEntry))
+        self.navigationItem.rightBarButtonItem = addButton
+            
     }
     
     @objc func toNewEntry(){
         performSegue(withIdentifier: "toNewEntry", sender: nil)
+    }
+    
+    @objc func profileClicked(){
+        print("Profile clicked")
     }
     
 }
