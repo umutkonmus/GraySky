@@ -17,6 +17,7 @@ class NetworkService : DataProvider{
     var userUID: String?
     var username: String?
     var userImageUrl: String?
+    var name: String?
     
     init() {
        update()
@@ -25,7 +26,7 @@ class NetworkService : DataProvider{
     func update(){
         self.userUID = Auth.auth().currentUser!.uid
         let firestoreDatabase = Firestore.firestore()
-        firestoreDatabase.collection("UserImages").document(userUID!).getDocument() { snapshot, error in
+        firestoreDatabase.collection("UserInfo").document(userUID!).getDocument() { snapshot, error in
             if let error = error {
                 self.delegate?.didFailWithError(error)
                 return
@@ -33,7 +34,9 @@ class NetworkService : DataProvider{
             
             if let snapshot = snapshot {
                 self.username = snapshot.get("username") as? String
+                self.name = snapshot.get("name") as? String
                 self.userImageUrl = snapshot.get("imageUrl") as? String
+                self.delegate?.didFetchUser()
             }
         }
     }
@@ -60,12 +63,19 @@ class NetworkService : DataProvider{
                     let publisherUID = document.get("publisherUID") as! String
                     let likedBy = document.get("likedBy") as? [String] ?? []
                     let likeCount = likedBy.count
+                    let republishedBy = document.get("republishedBy") as? [String] ?? []
+                    let republishedCount = republishedBy.count
+                    let comments = document.get("comments") as? [String] ?? []
+                    let commentsCount = comments.count
                     let isLiked = likedBy.contains(self.userUID ?? "")
+                    let isRepublished = republishedBy.contains(self.userUID ?? "")
+                    
                     let date = document.get("date") as! Timestamp
+                    let differenceFromNow = self.differenceFromNow(timestamp: date.dateValue())
                     
                     dispatchGroup.enter()
                     
-                    let imageRef = firestoreDatabase.collection("UserImages").document(publisherUID)
+                    let imageRef = firestoreDatabase.collection("UserInfo").document(publisherUID)
                     imageRef.getDocument { snapshot, error in
                         
                         defer {
@@ -78,15 +88,20 @@ class NetworkService : DataProvider{
                         
                         if let snapshot = snapshot {
                             let imageUrl = snapshot.get("imageUrl") as! String
-                            
+                            let name = snapshot.get("name") as! String
                             let username = snapshot.get("username") as! String
                             let entry = Entry(documentId: documentId,
                                               date: date.dateValue(),
                                               userName: username,
+                                              userUsername: name,
                                               userText: userText,
                                               userImageUrl: imageUrl,
+                                              timeAgo: differenceFromNow,
+                                              isRepublished: isRepublished,
                                               isLiked: isLiked,
-                                              likeCount: likeCount)
+                                              likeCount: republishedCount,
+                                              commentCount: commentsCount,
+                                              republishedCount: likeCount)
                             data.append(entry)
                         }
                     }
@@ -122,17 +137,25 @@ class NetworkService : DataProvider{
                 let dispatchGroup = DispatchGroup()
                 
                 for document in snapshot.documents {
+                    
                     let documentId = document.documentID
                     let userText = document.get("text") as? String ?? ""
                     let publisherUID = document.get("publisherUID") as? String ?? ""
                     let likedBy = document.get("likedBy") as? [String] ?? []
                     let likeCount = likedBy.count
+                    let republishedBy = document.get("republishedBy") as? [String] ?? []
+                    let republishedCount = republishedBy.count
+                    let comments = document.get("comments") as? [String] ?? []
+                    let commentsCount = comments.count
                     let isLiked = likedBy.contains(self.userUID ?? "")
+                    let isRepublished = republishedBy.contains(self.userUID ?? "")
+                    
                     let date = document.get("date") as! Timestamp
+                    let differenceFromNow = self.differenceFromNow(timestamp: date.dateValue())
                     
                     dispatchGroup.enter()
                     
-                    let imageRef = firestoreDatabase.collection("UserImages").document(publisherUID)
+                    let imageRef = firestoreDatabase.collection("UserInfo").document(publisherUID)
                     imageRef.getDocument { snapshot, error in
                         
                         defer {
@@ -150,16 +173,22 @@ class NetworkService : DataProvider{
                         }
                         
                         let imageUrl = snapshot.get("imageUrl") as? String ?? ""
+                        let name = snapshot.get("name") as? String ?? ""
                         let username = snapshot.get("username") as? String ?? "Unknown"
                         
                         
                         let entry = Entry(documentId: documentId,
                                           date: date.dateValue(),
                                           userName: username,
+                                          userUsername: name,
                                           userText: userText,
                                           userImageUrl: imageUrl,
+                                          timeAgo: differenceFromNow,
+                                          isRepublished: isRepublished,
                                           isLiked: isLiked,
-                                          likeCount: likeCount)
+                                          likeCount: republishedCount,
+                                          commentCount: commentsCount,
+                                          republishedCount: likeCount)
                         data.append(entry)
                     }
                 }
@@ -201,7 +230,7 @@ class NetworkService : DataProvider{
     
     func fetchUser(forUserId userId: String, completion: @escaping (Result<(imageUrl: String, username: String), Error>) -> Void) {
 
-            let docRef = db.collection("UserImages").document(userId)
+            let docRef = db.collection("UserInfo").document(userId)
             
             docRef.getDocument { (document, error) in
                 if let error = error {
@@ -269,10 +298,9 @@ class NetworkService : DataProvider{
                     return
                 }
                 
-                // Firestore'a kaydetme (örnek bir belgeye)
                 let db = Firestore.firestore()
                 if let id = self.userUID {
-                    db.collection("UserImages").document(id).setData(["imageUrl": downloadURL.absoluteString,
+                    db.collection("UserInfo").document(id).setData(["imageUrl": downloadURL.absoluteString,
                         "username": username]) { error in
                         if let error = error {
                             completion(false, error)

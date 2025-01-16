@@ -12,8 +12,13 @@ struct Entry : Codable{
     let documentId: String
     let date: Date
     let userName: String
+    let userUsername: String
     let userText: String
     let userImageUrl: String
+    let timeAgo: String
+    let isRepublished: Bool
     let isLiked: Bool
     let likeCount: Int
+    let commentCount: Int
+    let republishedCount: Int
 }

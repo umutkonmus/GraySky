@@ -43,7 +43,18 @@ class NewEntryViewController: UIViewController,UITextViewDelegate {
     
     @IBAction func publishClicked(_ sender: Any) {
         // API CALL
-        let entry = Entry(documentId: UUID().uuidString, date:Date(), userName: service.username!, userText: textView.text, userImageUrl: service.userImageUrl!, isLiked: false, likeCount: 0)
+        let entry = Entry(documentId: UUID().uuidString,
+                          date:Date(),
+                          userName: service.username!,
+                          userUsername: service.name!,
+                          userText: textView.text,
+                          userImageUrl: service.userImageUrl!,
+                          timeAgo: "now",
+                          isRepublished: false,
+                          isLiked: false,
+                          likeCount: 0,
+                          commentCount: 0,
+                          republishedCount: 0)
         service.newPost(with: entry) { success, error in
             if success{
                 self.dismiss(animated: true)

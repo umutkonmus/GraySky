@@ -9,6 +9,10 @@ import UIKit
 import FirebaseAuth
 
 class ProfileViewController: UIViewController, NetworkServiceDelegate {
+    func didFetchUser() {
+        
+    }
+    
 
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var usernameLabel: UILabel!

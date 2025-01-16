@@ -16,4 +16,8 @@ extension DataProvider{
     func fetchData(with userId: String){
         
     }
+    
+    func didFetchUser(){
+        
+    }
 }
