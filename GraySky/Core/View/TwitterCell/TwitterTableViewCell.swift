@@ -9,6 +9,9 @@ import UIKit
 
 class TwitterTableViewCell: UITableViewCell {
 
+    @IBOutlet weak var commentButton: UIButton!
+    @IBOutlet weak var republishButton: UIButton!
+    @IBOutlet weak var likeButton: UIButton!
     @IBOutlet weak var userImage: UIImageView!
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var nicknameLabel: UILabel!
@@ -20,6 +23,10 @@ class TwitterTableViewCell: UITableViewCell {
     @IBOutlet weak var emptyView2: UIView!
     @IBOutlet weak var emptyView3: UIView!
     @IBOutlet weak var entryText: UILabel!
+    
+    var documentId : String?
+    var isLiked = false
+    let service = NetworkService()
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -33,13 +40,40 @@ class TwitterTableViewCell: UITableViewCell {
     }
     
     @IBAction func moreClicked(_ sender: Any) {
+        guard let viewController = findViewController() else {return}
+        
+        if let vc = viewController as? ProfileViewController {
+            vc.showOptionsMenu(documentId:documentId ?? "")
+        }
     }
-    @IBAction func shareClicked(_ sender: Any) {
-    }
+    
+    
     @IBAction func likeClicked(_ sender: Any) {
+        if isLiked {
+            likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
+            isLiked = false
+            likeCountLabel.text = String(Int(likeCountLabel.text!)! - 1)
+            // API call
+            if let id = documentId{
+                service.unlikePost(postId: id, userId: service.userUID ?? "")
+            }
+        }else{
+            isLiked = true
+            likeButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+            likeCountLabel.text = String(Int(likeCountLabel.text!)! + 1)
+            // API call
+            
+            if let id = documentId{
+                service.likePost(postId: id, userId: service.userUID ?? "")
+            }
+        }
     }
+    
     @IBAction func retweetClicked(_ sender: Any) {
     }
     @IBAction func commentClicked(_ sender: Any) {
+    }
+    
+    @IBAction func shareClicked(_ sender: Any) {
     }
 }

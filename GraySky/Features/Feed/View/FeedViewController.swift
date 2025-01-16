@@ -38,6 +38,7 @@ class FeedViewController: UIViewController, NetworkServiceDelegate{
     }
     
     func didFailWithError(_ error: any Error) {
+        print("failed with error")
         makeAlert(message: error.localizedDescription)
     }
     
@@ -65,11 +66,12 @@ extension FeedViewController : UITableViewDelegate, UITableViewDataSource{
 
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return data.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = tableView.dequeueReusableCell(withIdentifier: "TwitterCell",for:indexPath) as? TwitterTableViewCell{
+            /*
             cell.nicknameLabel.text = "@umutkonmus"
             cell.userImage.image = UIImage(named: "asian")
             cell.commentCountLabel.text = "123"
@@ -77,6 +79,10 @@ extension FeedViewController : UITableViewDelegate, UITableViewDataSource{
             cell.timeAgoLabel.text = "10h"
             cell.usernameLabel.text = "Umut Konmus"
             cell.entryText.text = "This year is amazing!"
+             */
+            
+            cell.configure(with: data[indexPath.row])
+            cell.layer.borderColor = UIColor.black.cgColor
             cell.selectionStyle = .none
             return cell
         }

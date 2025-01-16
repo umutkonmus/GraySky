@@ -55,7 +55,7 @@ class EditProfileViewController: UIViewController,UIImagePickerControllerDelegat
     }
     
     @objc func performEdit(){
-        isUsernameChanged = username == usernameTextField.text
+        isUsernameChanged = currentUsername != usernameTextField.text
         //API CALL
         if isImageChanged || isUsernameChanged{
             activityIndicator.startAnimating()

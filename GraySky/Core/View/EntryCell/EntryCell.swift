@@ -43,16 +43,7 @@ class EntryCell: UITableViewCell {
         }
     }
     
-    func findViewController() -> UIViewController? {
-            var responder: UIResponder? = self
-            while responder != nil {
-                responder = responder?.next
-                if let viewController = responder as? UIViewController {
-                    return viewController
-                }
-            }
-            return nil
-        }
+    
     
     @IBAction func likeClicked(_ sender: Any) {
         if isLiked {

@@ -99,9 +99,9 @@ class NetworkService : DataProvider{
                                               timeAgo: differenceFromNow,
                                               isRepublished: isRepublished,
                                               isLiked: isLiked,
-                                              likeCount: republishedCount,
+                                              likeCount: likeCount,
                                               commentCount: commentsCount,
-                                              republishedCount: likeCount)
+                                              republishedCount: republishedCount)
                             data.append(entry)
                         }
                     }
@@ -186,9 +186,9 @@ class NetworkService : DataProvider{
                                           timeAgo: differenceFromNow,
                                           isRepublished: isRepublished,
                                           isLiked: isLiked,
-                                          likeCount: republishedCount,
+                                          likeCount: likeCount,
                                           commentCount: commentsCount,
-                                          republishedCount: likeCount)
+                                          republishedCount: republishedCount)
                         data.append(entry)
                     }
                 }
@@ -275,7 +275,7 @@ class NetworkService : DataProvider{
     }
     
     func editProfile(image :UIImage,username :String,completion: @escaping (Bool,Error?) -> Void) {
-        
+        print("edit")
         let storageRef = Storage.storage().reference()
         
         guard let imageData = image.jpegData(compressionQuality: 0.75) else {

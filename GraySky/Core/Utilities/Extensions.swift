@@ -34,6 +34,26 @@ extension EntryCell {
     }
 }
 
+extension TwitterTableViewCell {
+    func configure(with entry: Entry){
+        self.documentId = entry.documentId
+        usernameLabel.text = entry.userUsername
+        nicknameLabel.text = "@\(entry.userName)"
+        timeAgoLabel.text = entry.timeAgo
+        entryText.text = entry.userText
+        userImage.sd_setImage(with: URL(string: entry.userImageUrl)!)
+        isLiked = entry.isLiked
+        likeCountLabel.text = String(entry.likeCount)
+        if entry.isLiked {
+            likeButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+            likeButton.tintColor = .link
+        }else {
+            likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
+            likeButton.tintColor = .placeholderText
+        }
+    }
+}
+
 extension UIImageView {
     public func maskCircle() {
         self.layer.cornerRadius = (self.frame.size.width) / 2
@@ -47,7 +67,6 @@ extension UIImageView {
 extension NetworkService {
     func differenceFromNow(timestamp: Date) -> String {
         let currentDate = Date()
-        let calendar = Calendar.current
         
         let differenceInSeconds = currentDate.timeIntervalSince(timestamp)
         let hours = differenceInSeconds / 3600
@@ -61,4 +80,17 @@ extension NetworkService {
         }
     }
 
+}
+
+extension UITableViewCell {
+    func findViewController() -> UIViewController? {
+            var responder: UIResponder? = self
+            while responder != nil {
+                responder = responder?.next
+                if let viewController = responder as? UIViewController {
+                    return viewController
+                }
+            }
+            return nil
+        }
 }

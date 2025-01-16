@@ -81,17 +81,17 @@ class LoginViewController: UIViewController {
         
         let imageUrl = "https://firebasestorage.googleapis.com/v0/b/graysky-e3186.firebasestorage.app/o/media%2FC453330A-011D-41D3-9681-94C945A3E579.jpeg?alt=media&token=0347e80e-adaf-48ca-ac08-ba3f2b7a9ec4"
         
-        let userImageData: [String: Any] = [
+        let userInfoData: [String: Any] = [
             "imageUrl": imageUrl,
+            "name": "",
             "username": emailText.text!
         ]
         
-        db.collection("UserImages").document(userId).setData(userImageData) { error in
+        db.collection("UserInfo").document(userId).setData(userInfoData) { error in
             if let error = error {
-                // Veritabanına veri eklerken hata oluştu
                 self.makeAlert(message: "Veri eklenirken hata oluştu: \(error.localizedDescription)")
             } else {
-                // Veri başarıyla eklendi
+                // Successfulyy Uploaded
                 self.performSegue(withIdentifier: "toMainApp", sender: nil)
             }
         }
