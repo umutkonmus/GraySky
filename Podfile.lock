@@ -1370,6 +1370,7 @@ PODS:
   - SDWebImage (5.20.0):
     - SDWebImage/Core (= 5.20.0)
   - SDWebImage/Core (5.20.0)
+  - SideMenu (6.5.0)
 
 DEPENDENCIES:
   - FirebaseAnalytics
@@ -1377,6 +1378,7 @@ DEPENDENCIES:
   - FirebaseFirestore
   - FirebaseStorage
   - SDWebImage (~> 5.0)
+  - SideMenu
 
 SPEC REPOS:
   trunk:
@@ -1404,6 +1406,7 @@ SPEC REPOS:
     - PromisesObjC
     - RecaptchaInterop
     - SDWebImage
+    - SideMenu
 
 SPEC CHECKSUMS:
   abseil: d121da9ef7e2ff4cab7666e76c5a3e0915ae08c3
@@ -1430,7 +1433,8 @@ SPEC CHECKSUMS:
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
   SDWebImage: 73c6079366fea25fa4bb9640d5fb58f0893facd8
+  SideMenu: f583187d21c5b1dd04c72002be544b555a2627a2
 
-PODFILE CHECKSUM: ad4db602d6a60ff462bcee59eb51d7b0be5f9b30
+PODFILE CHECKSUM: 6455fee8a53376276b34681e948d0e45ee1ce51a
 
 COCOAPODS: 1.16.2

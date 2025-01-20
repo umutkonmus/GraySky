@@ -12,6 +12,7 @@ target 'GraySky' do
   pod 'FirebaseFirestore'
   pod 'SDWebImage', '~> 5.0'
   pod 'FirebaseStorage'
+  pod 'SideMenu'
 
   target 'GraySkyTests' do
     inherit! :search_paths

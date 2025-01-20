@@ -6,10 +6,12 @@
 //
 
 import UIKit
+import SideMenu
 
 class FeedViewController: UIViewController, NetworkServiceDelegate{
 
     let service = NetworkService()
+    var sideMenu: SideMenuNavigationController?
     var data: [Entry] = []
     
     @IBOutlet weak var tableView: UITableView!
@@ -22,6 +24,15 @@ class FeedViewController: UIViewController, NetworkServiceDelegate{
         tableView.delegate = self
         tableView.dataSource = self
         service.delegate = self
+        
+        let sideMenuVC = SideMenuViewController()
+        sideMenu = SideMenuNavigationController(rootViewController: sideMenuVC)
+        sideMenu?.leftSide = true
+        sideMenu?.menuWidth = UIScreen.main.bounds.width * 0.8
+        SideMenuManager.default.leftMenuNavigationController = sideMenu
+        
+        let slideRightGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(openSideMenu))
+        view.addGestureRecognizer(slideRightGestureRecognizer)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -51,7 +62,7 @@ class FeedViewController: UIViewController, NetworkServiceDelegate{
         let profileButton = UIButton(type: .custom)
         profileButton.addSubview(profileImageView)
         profileButton.frame = profileImageView.frame
-        profileButton.addTarget(self, action: #selector(profileClicked), for: .touchUpInside)
+        profileButton.addTarget(self, action: #selector(openSideMenu), for: .touchUpInside)
         
         let profileBarButton = UIBarButtonItem(customView: profileButton)
         self.navigationItem.leftBarButtonItem = profileBarButton
@@ -120,8 +131,8 @@ extension FeedViewController{
         performSegue(withIdentifier: "toNewEntry", sender: nil)
     }
     
-    @objc func profileClicked(){
-        print("Profile clicked")
+    @objc func openSideMenu(){
+        present(sideMenu!,animated: true)
     }
     
 }
