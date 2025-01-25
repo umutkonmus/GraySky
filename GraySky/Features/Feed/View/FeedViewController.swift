@@ -38,7 +38,7 @@ class FeedViewController: UIViewController, NetworkServiceDelegate{
     override func viewWillAppear(_ animated: Bool) {
         service.fetchData()
         setupTabBar()
-        setupBarButton()
+        setupNavigation()
     }
     
     func didFetchData(_ data: [Entry]) {
@@ -54,11 +54,11 @@ class FeedViewController: UIViewController, NetworkServiceDelegate{
     }
     
     func didFetchUser(){
-        let profileImageView = UIImageView()
+        let profileImageView = ProfileImageView(frame: CGRect(x: 0, y: 0, width: 32, height: 32))
         profileImageView.sd_setImage(with: URL(string: service.userImageUrl!))
         profileImageView.contentMode = .scaleAspectFill
         profileImageView.clipsToBounds = true
-        profileImageView.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
+        //profileImageView.frame = CGRect(x: 0, y: 0, width: 32, height: 32)
         let profileButton = UIButton(type: .custom)
         profileButton.addSubview(profileImageView)
         profileButton.frame = profileImageView.frame
@@ -110,20 +110,38 @@ extension FeedViewController{
     func setupTabBar(){
         tabBarItem.image = UIImage(systemName: "house.fill")
     }
-    func setupBarButton(){/*
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem.init(image: UIImage(named:"asian"), style:.plain, target: self, action: #selector(barButtonProfileClicked))
-        self.navigationItem.title = "GraySky"
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem.init(image: UIImage(systemName: "plus.app"), style: .done, target: self, action: #selector(toNewEntry))
-        */
+    func setupNavigation(){
         
         let appIconImageView = UIImageView(image: UIImage(named: "graysky"))
         appIconImageView.contentMode = .scaleAspectFit
-        appIconImageView.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
         self.navigationItem.titleView = appIconImageView
+
+        // Auto layout
+        appIconImageView.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            appIconImageView.widthAnchor.constraint(equalToConstant: 22),
+            appIconImageView.heightAnchor.constraint(equalToConstant: 22)
+        ])
         
+        
+        let button = UIButton(type: .custom)
+        button.setImage(UIImage(named: "FeatureStroke"), for: .normal)
+        button.contentMode = .scaleAspectFit
+        
+        button.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            button.widthAnchor.constraint(equalToConstant: 27),
+            button.heightAnchor.constraint(equalToConstant: 27)
+        ])
        
+        button.addTarget(self, action: #selector(toNewEntry), for: .touchUpInside)
+
+       
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: button)
+        /*
         let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(toNewEntry))
-        self.navigationItem.rightBarButtonItem = addButton
+        self.navigationItem.rightBarButtonItem = addButton*/
             
     }
     
