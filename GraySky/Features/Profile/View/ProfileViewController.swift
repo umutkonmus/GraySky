@@ -8,29 +8,93 @@
 import UIKit
 import FirebaseAuth
 
-class ProfileViewController: UIViewController, NetworkServiceDelegate {
+class ProfileViewController: UIViewController, NetworkServiceDelegate{
+    
+    
     func didFetchUser() {
         
     }
-    
+    private let viewModel = ProfileViewModel()
 
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var usernameLabel: UILabel!
-    @IBOutlet weak var tableView: UITableView!
+    //@IBOutlet weak var tableView : UITableView!
+    @IBOutlet weak var editButton: UIButton!
+    @IBOutlet weak var containerView: UIView!
+    @IBOutlet weak var segmentedControl: UISegmentedControl!
     
     let service = NetworkService()
     var data: [Entry] = []
     
+    var pageViewController : UIPageViewController?
+    var currentIndex = 0
+    
+    var pages: [UIViewController] = {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        return [
+            storyboard.instantiateViewController(withIdentifier: "PostsViewController"),
+            storyboard.instantiateViewController(withIdentifier:"RepliesViewController"),
+            storyboard.instantiateViewController(withIdentifier:"LikesViewController")
+        ]
+    }()
+    
+    override func viewWillAppear(_ animated: Bool) {
+        setupView()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupBarButton()
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        segmentedControl.removeAllSegments()
+        segmentedControl.insertSegment(withTitle: "Tweets", at: 0, animated: false)
+        segmentedControl.insertSegment(withTitle: "Replies", at: 1, animated: false)
+        segmentedControl.insertSegment(withTitle: "Likes", at: 2, animated: false)
+        segmentedControl.selectedSegmentIndex = 0
+        
+        let initialViewController = storyboard.instantiateViewController(withIdentifier: "PostsViewController")
+        switchViewController(initialViewController)
+        segmentedControl.addTarget(self, action: #selector(handleChange(_:)), for: .valueChanged)
+        
         
         service.delegate = self
-        
-        tableView.register(UINib(nibName: "EntryCell", bundle: nil), forCellReuseIdentifier: "cell")
+        /*
+        tableView.register(UINib(nibName: "TwitterTableViewCell", bundle: nil), forCellReuseIdentifier: "cell")
         tableView.delegate = self
-        tableView.dataSource = self
+        tableView.dataSource = self */
+    }
+    
+    func switchViewController(_ viewController: UIViewController) {
+        for child in children {
+            child.willMove(toParent: nil)
+            child.view.removeFromSuperview()
+            child.removeFromParent()
+        }
+        
+        addChild(viewController)
+        viewController.view.frame = containerView.bounds
+        containerView.addSubview(viewController.view)
+        viewController.didMove(toParent: self)
+    }
+    
+    @objc func handleChange(_ sender: UISegmentedControl){
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        var selectedViewController: UIViewController
+        
+        switch sender.selectedSegmentIndex {
+        case 0:
+            selectedViewController = storyboard.instantiateViewController(withIdentifier: "PostsViewController")
+        case 1:
+            selectedViewController = storyboard.instantiateViewController(withIdentifier: "RepliesViewController")
+        case 2:
+            selectedViewController = storyboard.instantiateViewController(withIdentifier: "LikesViewController")
+        default:
+            return
+        }
+        
+        switchViewController(selectedViewController)
     }
     
     func setupView(){
@@ -46,10 +110,16 @@ class ProfileViewController: UIViewController, NetworkServiceDelegate {
         })
         service.fetchData(with: service.userUID!)
         imageView.maskCircle()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        setupView()
+        
+        //Edit Button
+        editButton.tintColor = viewModel.primaryColor
+        editButton.layer.borderColor = viewModel.primaryColor.cgColor
+        editButton.layer.borderWidth = 1
+        editButton.layer.cornerRadius = editButton.frame.width / 5.8
+        
+        //Segmented Control
+        guard let firstPage = pages.first else {return}
+        
     }
     
     @IBAction func editClicked(_ sender: Any) {
@@ -96,7 +166,7 @@ class ProfileViewController: UIViewController, NetworkServiceDelegate {
     func didFetchData(_ data: [Entry]) {
         self.data = data
         DispatchQueue.main.async {
-            self.tableView.reloadData()
+            //self.tableView.reloadData()
         }
     }
     
@@ -104,10 +174,6 @@ class ProfileViewController: UIViewController, NetworkServiceDelegate {
         makeAlert(message: error.localizedDescription)
     }
     
-    func setupBarButton() {
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem.init(title:"Sign Out", style: .done, target: self, action: #selector(signOutClicked))
-        self.navigationItem.title="Profile"
-    }
     
     //MARK: Sign Out
     @objc func signOutClicked(){
@@ -131,7 +197,7 @@ class ProfileViewController: UIViewController, NetworkServiceDelegate {
     }
     
 }
-
+/*
 //MARK: TableView delegate and datasource
 extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
 
@@ -142,15 +208,18 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        if let cell = tableView.dequeueReusableCell(withIdentifier: "cell",for:indexPath) as? EntryCell{
-            
+        if let cell = tableView.dequeueReusableCell(withIdentifier: "cell",for:indexPath) as? TwitterTableViewCell{
+            /*
             cell.configure(with: data[indexPath.row])
             cell.layer.borderColor = UIColor.black.cgColor
             cell.layer.borderWidth = 0.2
             cell.layer.cornerRadius = 8
             cell.clipsToBounds = true
             cell.selectionStyle = .none
-            
+             */
+            cell.configure(with: data[indexPath.row])
+            cell.layer.borderColor = UIColor.black.cgColor
+            cell.selectionStyle = .none
             return cell
             
         }
@@ -164,3 +233,4 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
 }
+*/

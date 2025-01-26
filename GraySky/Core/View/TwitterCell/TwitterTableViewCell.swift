@@ -50,7 +50,8 @@ class TwitterTableViewCell: UITableViewCell {
     
     @IBAction func likeClicked(_ sender: Any) {
         if isLiked {
-            likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
+            likeButton.setImage(UIImage(named: "HeartStroke"), for: .normal)
+            likeCountLabel.textColor = UIColor.placeholderText
             isLiked = false
             likeCountLabel.text = String(Int(likeCountLabel.text!)! - 1)
             // API call
@@ -59,8 +60,9 @@ class TwitterTableViewCell: UITableViewCell {
             }
         }else{
             isLiked = true
-            likeButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+            likeButton.setImage(UIImage(named: "HeartSolid"), for: .normal)
             likeCountLabel.text = String(Int(likeCountLabel.text!)! + 1)
+            likeCountLabel.textColor = UIColor(hex: "CE395F")
             // API call
             
             if let id = documentId{

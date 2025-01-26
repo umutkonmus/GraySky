@@ -16,14 +16,23 @@ class SideMenuViewController: UIViewController {
     @IBOutlet weak var followingCountLabel: UILabel!
     @IBOutlet weak var followerCountLabel: UILabel!
     
-    @IBOutlet weak var helpCenterButton: UIButton!
-    @IBOutlet weak var settingsButton: UIButton!
     @IBOutlet weak var profileButton: SideMenuButton!
     @IBOutlet weak var listsButton: SideMenuButton!
     @IBOutlet weak var topicsButton: SideMenuButton!
     @IBOutlet weak var bookmarksButton: SideMenuButton!
     @IBOutlet weak var momentsButton: SideMenuButton!
     var service = NetworkService()
+    weak var mainNavigationController: UINavigationController!
+    
+    init(mainNavigationController: UINavigationController) {
+        
+        self.mainNavigationController = mainNavigationController
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,11 +62,33 @@ class SideMenuViewController: UIViewController {
         bookmarksButton.configure(icon: bookmarksIcon, title: "Bookmarks")
         momentsButton.configure(icon: momentsIcon, title: "Moments")
         
+        let profileImageTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(profileImageClicked))
+        profileImageView.isUserInteractionEnabled = true
+        profileImageView.addGestureRecognizer(profileImageTapGestureRecognizer)
+        
+    }
+    
+    @objc func profileImageClicked() {
+        showProfileVC()
+    }
+    
+    @objc func settingsClicked() {
+        print("Settings Clicked")
+    }
+    
+    @objc func privacyClicked() {
+        print("Privacy Clicked")
+    }
+    
+    func showProfileVC(){
+        mainNavigationController.performSegue(withIdentifier: "toProfileVC", sender: nil)
+        self.dismiss(animated: true, completion: nil)
     }
 
     @IBAction func moreClicked(_ sender: Any) {
     }
     @IBAction func profileClicked(_ sender: Any) {
+        showProfileVC()
     }
     @IBAction func listsClicked(_ sender: Any) {
     }

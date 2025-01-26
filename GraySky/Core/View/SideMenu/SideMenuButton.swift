@@ -29,7 +29,7 @@ class SideMenuButton: UIButton {
         // Label
         customTitle.textAlignment = .left
         customTitle.font = UIFont.systemFont(ofSize: 18)
-        customTitle.textColor = .black
+        customTitle.textColor = .label
         addSubview(customTitle)
 
         // Constraints

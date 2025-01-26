@@ -39,28 +39,27 @@ extension TwitterTableViewCell {
         self.documentId = entry.documentId
         usernameLabel.text = entry.userUsername
         nicknameLabel.text = "@\(entry.userName)"
-        timeAgoLabel.text = entry.timeAgo
+        timeAgoLabel.text = "·\(entry.timeAgo)"
         entryText.text = entry.userText
         userImage.sd_setImage(with: URL(string: entry.userImageUrl)!)
         isLiked = entry.isLiked
         likeCountLabel.text = String(entry.likeCount)
         if entry.isLiked {
-            likeButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
-            likeButton.tintColor = .link
+            likeButton.setImage(UIImage(named: "HeartSolid"), for: .normal)
+            //likeCountLabel.text = String(Int(likeCountLabel.text!)! + 1)
         }else {
-            likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
-            likeButton.tintColor = .placeholderText
+            likeButton.setImage(UIImage(named: "HeartStroke"), for: .normal)
+            likeCountLabel.textColor = UIColor.placeholderText
         }
     }
 }
 
 extension UIImageView {
     public func maskCircle() {
-        self.layer.cornerRadius = (self.frame.size.width) / 2
+        self.layer.cornerRadius = self.frame.size.width / 2
+        self.layer.borderWidth = 4
+        self.layer.borderColor = UIColor.white.cgColor
         self.clipsToBounds = true
-        //self.layer.borderWidth = 3.0
-        guard let backgroundColor = self.backgroundColor else { return }
-        self.layer.borderColor = backgroundColor.cgColor
     }
 }
 
@@ -93,4 +92,24 @@ extension UITableViewCell {
             }
             return nil
         }
+}
+
+extension UIColor {
+    /// Hexadecimal renklerden UIColor oluşturur
+    /// - Parameters:
+    ///   - hex: Hexadecimal renk kodu (örn. 0x4C9EEB veya "4C9EEB")
+    ///   - alpha: Rengin opaklık değeri (0.0 - 1.0)
+    convenience init(hex: String, alpha: CGFloat = 1.0) {
+        var hexSanitized = hex.trimmingCharacters(in: .whitespacesAndNewlines)
+        hexSanitized = hexSanitized.replacingOccurrences(of: "#", with: "")
+        
+        var rgb: UInt64 = 0
+        Scanner(string: hexSanitized).scanHexInt64(&rgb)
+        
+        let red = CGFloat((rgb & 0xFF0000) >> 16) / 255.0
+        let green = CGFloat((rgb & 0x00FF00) >> 8) / 255.0
+        let blue = CGFloat(rgb & 0x0000FF) / 255.0
+        
+        self.init(red: red, green: green, blue: blue, alpha: alpha)
+    }
 }
