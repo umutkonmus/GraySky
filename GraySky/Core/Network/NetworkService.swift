@@ -331,3 +331,21 @@ class NetworkService : DataProvider{
     }
     
 }
+
+extension NetworkService {
+    func differenceFromNow(timestamp: Date) -> String {
+        let currentDate = Date()
+        
+        let differenceInSeconds = currentDate.timeIntervalSince(timestamp)
+        let hours = differenceInSeconds / 3600
+        
+        // More than 24h
+        if hours >= 24 {
+            let days = Int(hours / 24)
+            return "\(days)d"
+        } else {
+            return "\(Int(hours))h"
+        }
+    }
+}
+

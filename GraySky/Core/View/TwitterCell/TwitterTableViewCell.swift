@@ -79,3 +79,23 @@ class TwitterTableViewCell: UITableViewCell {
     @IBAction func shareClicked(_ sender: Any) {
     }
 }
+
+extension TwitterTableViewCell {
+    func configure(with entry: Entry){
+        self.documentId = entry.documentId
+        usernameLabel.text = entry.userUsername
+        nicknameLabel.text = "@\(entry.userName)"
+        timeAgoLabel.text = "·\(entry.timeAgo)"
+        entryText.text = entry.userText
+        userImage.sd_setImage(with: URL(string: entry.userImageUrl)!)
+        isLiked = entry.isLiked
+        likeCountLabel.text = String(entry.likeCount)
+        if entry.isLiked {
+            likeButton.setImage(UIImage(named: "HeartSolid"), for: .normal)
+            //likeCountLabel.text = String(Int(likeCountLabel.text!)! + 1)
+        }else {
+            likeButton.setImage(UIImage(named: "HeartStroke"), for: .normal)
+            likeCountLabel.textColor = UIColor.placeholderText
+        }
+    }
+}

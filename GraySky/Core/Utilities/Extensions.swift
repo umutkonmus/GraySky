@@ -34,26 +34,6 @@ extension EntryCell {
     }
 }
 
-extension TwitterTableViewCell {
-    func configure(with entry: Entry){
-        self.documentId = entry.documentId
-        usernameLabel.text = entry.userUsername
-        nicknameLabel.text = "@\(entry.userName)"
-        timeAgoLabel.text = "·\(entry.timeAgo)"
-        entryText.text = entry.userText
-        userImage.sd_setImage(with: URL(string: entry.userImageUrl)!)
-        isLiked = entry.isLiked
-        likeCountLabel.text = String(entry.likeCount)
-        if entry.isLiked {
-            likeButton.setImage(UIImage(named: "HeartSolid"), for: .normal)
-            //likeCountLabel.text = String(Int(likeCountLabel.text!)! + 1)
-        }else {
-            likeButton.setImage(UIImage(named: "HeartStroke"), for: .normal)
-            likeCountLabel.textColor = UIColor.placeholderText
-        }
-    }
-}
-
 extension UIImageView {
     public func maskCircle() {
         self.layer.cornerRadius = self.frame.size.width / 2
@@ -61,24 +41,6 @@ extension UIImageView {
         self.layer.borderColor = UIColor.white.cgColor
         self.clipsToBounds = true
     }
-}
-
-extension NetworkService {
-    func differenceFromNow(timestamp: Date) -> String {
-        let currentDate = Date()
-        
-        let differenceInSeconds = currentDate.timeIntervalSince(timestamp)
-        let hours = differenceInSeconds / 3600
-        
-        // More than 24h
-        if hours >= 24 {
-            let days = Int(hours / 24)
-            return "\(days)d"
-        } else {
-            return "\(Int(hours))h"
-        }
-    }
-
 }
 
 extension UITableViewCell {
@@ -95,10 +57,10 @@ extension UITableViewCell {
 }
 
 extension UIColor {
-    /// Hexadecimal renklerden UIColor oluşturur
+    /// Creates UIColor from hex
     /// - Parameters:
-    ///   - hex: Hexadecimal renk kodu (örn. 0x4C9EEB veya "4C9EEB")
-    ///   - alpha: Rengin opaklık değeri (0.0 - 1.0)
+    ///   - hex: Hexadecimal color code (örn. 0x4C9EEB veya "4C9EEB")
+    ///   - alpha: Opacity value for color (0.0 - 1.0)
     convenience init(hex: String, alpha: CGFloat = 1.0) {
         var hexSanitized = hex.trimmingCharacters(in: .whitespacesAndNewlines)
         hexSanitized = hexSanitized.replacingOccurrences(of: "#", with: "")
