@@ -11,6 +11,8 @@ import FirebaseStorage
 
 class NetworkService : DataProvider{
     
+    //static let shared = NetworkService()
+    
     weak var delegate: NetworkServiceDelegate?
     private let db = Firestore.firestore()
     
@@ -19,24 +21,35 @@ class NetworkService : DataProvider{
     var userImageUrl: String?
     var name: String?
     
+    var user: User?
+    
     init() {
-       update()
+        self.userUID = Auth.auth().currentUser!.uid
+        getLoggedUserFromDatabase()
     }
     
-    func update(){
-        self.userUID = Auth.auth().currentUser!.uid
+    func getLoggedUserFromDatabase(){
         let firestoreDatabase = Firestore.firestore()
         firestoreDatabase.collection("UserInfo").document(userUID!).getDocument() { snapshot, error in
             if let error = error {
                 self.delegate?.didFailWithError(error)
                 return
             }
-            
             if let snapshot = snapshot {
                 self.username = snapshot.get("username") as? String
                 self.name = snapshot.get("name") as? String
                 self.userImageUrl = snapshot.get("imageUrl") as? String
-                self.delegate?.didFetchUser()
+                
+                if let uid = self.userUID {
+                    if let name = self.name {
+                        if let username = self.username {
+                            if let url = self.userImageUrl {
+                                self.user = User(UID: uid, Name: name, Username: username, ImageUrl: url, Biography: "", FollowerCount: 123, FollowingCount: 456, JoinDate: .now)
+                                self.delegate?.didFetchUser(user: self.user!)
+                            }
+                        }
+                    }
+                }
             }
         }
     }

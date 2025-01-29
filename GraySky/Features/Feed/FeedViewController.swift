@@ -8,13 +8,16 @@
 import UIKit
 import SideMenu
 
-class FeedViewController: UIViewController, NetworkServiceDelegate{
+final class FeedViewController: UIViewController, FeedViewModelDelegate{
 
-    let service = NetworkService()
+    private var viewModel = FeedViewModel()
     var sideMenu: SideMenuNavigationController?
     var data: [Entry] = []
     
     @IBOutlet weak var tableView: UITableView!
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -23,7 +26,7 @@ class FeedViewController: UIViewController, NetworkServiceDelegate{
         tableView.estimatedRowHeight = 182
         tableView.delegate = self
         tableView.dataSource = self
-        service.delegate = self
+        viewModel.delegate = self
         
         let slideRightGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handleSlideRight(_:)))
         view.addGestureRecognizer(slideRightGestureRecognizer)
@@ -46,7 +49,7 @@ class FeedViewController: UIViewController, NetworkServiceDelegate{
     
     
     override func viewWillAppear(_ animated: Bool) {
-        service.fetchData()
+        viewModel.fetchData()
         setupViews()
     }
     
@@ -62,9 +65,9 @@ class FeedViewController: UIViewController, NetworkServiceDelegate{
         makeAlert(message: error.localizedDescription)
     }
     
-    func didFetchUser(){
+    func didFetchUser(user: User){
         let profileImageView = ProfileImageView(frame: CGRect(x: 0, y: 0, width: 32, height: 32))
-        profileImageView.sd_setImage(with: URL(string: service.userImageUrl!))
+        profileImageView.sd_setImage(with: URL(string: user.ImageUrl))
         profileImageView.contentMode = .scaleAspectFill
         profileImageView.clipsToBounds = true
         //profileImageView.frame = CGRect(x: 0, y: 0, width: 32, height: 32)

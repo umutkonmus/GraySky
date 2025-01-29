@@ -8,5 +8,5 @@
 protocol NetworkServiceDelegate: AnyObject{
     func didFetchData(_ data: [Entry])
     func didFailWithError(_ error: Error)
-    func didFetchUser()
+    func didFetchUser(user:User)
 }

@@ -8,7 +8,7 @@
 import Foundation
 
 protocol DataProvider{
-    var userUID : String? {get}
+    var user: User? {get}
     func fetchData()
     func fetchData(with userId: String)
 }

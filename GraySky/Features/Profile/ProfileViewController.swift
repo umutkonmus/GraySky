@@ -8,12 +8,8 @@
 import UIKit
 import FirebaseAuth
 
-class ProfileViewController: UIViewController, NetworkServiceDelegate{
+class ProfileViewController: UIViewController, ProfileViewModelDelegate{
     
-    
-    func didFetchUser() {
-        
-    }
     private let viewModel = ProfileViewModel()
 
     @IBOutlet weak var imageView: UIImageView!
@@ -23,11 +19,12 @@ class ProfileViewController: UIViewController, NetworkServiceDelegate{
     @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     
-    let service = NetworkService()
     var data: [Entry] = []
     
     var pageViewController : UIPageViewController?
     var currentIndex = 0
+    
+    var initialViewController : UIViewController!
     
     var pages: [UIViewController] = {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -38,6 +35,15 @@ class ProfileViewController: UIViewController, NetworkServiceDelegate{
         ]
     }()
     
+    let normalTextAttributes: [NSAttributedString.Key: Any] = [
+        .foregroundColor: UIColor.gray,
+        .font: UIFont.systemFont(ofSize: 16, weight: .regular)
+    ]
+    let selectedTextAttributes: [NSAttributedString.Key: Any] = [
+        .foregroundColor: UIColor.black,
+        .font: UIFont.systemFont(ofSize: 16, weight: .bold)
+    ]
+    
     override func viewWillAppear(_ animated: Bool) {
         setupView()
     }
@@ -45,20 +51,11 @@ class ProfileViewController: UIViewController, NetworkServiceDelegate{
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        viewModel.delegate = self
+        
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        
-        segmentedControl.removeAllSegments()
-        segmentedControl.insertSegment(withTitle: "Tweets", at: 0, animated: false)
-        segmentedControl.insertSegment(withTitle: "Replies", at: 1, animated: false)
-        segmentedControl.insertSegment(withTitle: "Likes", at: 2, animated: false)
-        segmentedControl.selectedSegmentIndex = 0
-        
-        let initialViewController = storyboard.instantiateViewController(withIdentifier: "PostsViewController")
-        switchViewController(initialViewController)
-        segmentedControl.addTarget(self, action: #selector(handleChange(_:)), for: .valueChanged)
-        
-        
-        service.delegate = self
+        initialViewController = storyboard.instantiateViewController(withIdentifier: "PostsViewController")
+
         /*
         tableView.register(UINib(nibName: "TwitterTableViewCell", bundle: nil), forCellReuseIdentifier: "cell")
         tableView.delegate = self
@@ -97,20 +94,15 @@ class ProfileViewController: UIViewController, NetworkServiceDelegate{
         switchViewController(selectedViewController)
     }
     
-    func setupView(){
-        service.update()
-        service.fetchUser(forUserId: service.userUID!, completion: { result in
-            switch result{
-            case .success(let userData):
-                self.usernameLabel.text = userData.username
-                self.imageView.sd_setImage(with: URL(string:userData.imageUrl))
-            case .failure(let error):
-                self.makeAlert(message: error.localizedDescription)
-            }
-        })
-        service.fetchData(with: service.userUID!)
+    
+    func didFetchUser(user: User) {
+        usernameLabel.text = user.Username
+        imageView.sd_setImage(with: URL(string: user.ImageUrl))
+        viewModel.fetchData(with: user.UID)
         imageView.maskCircle()
-        
+    }
+    
+    func setupView(){
         //Edit Button
         editButton.tintColor = viewModel.primaryColor
         editButton.layer.borderColor = viewModel.primaryColor.cgColor
@@ -119,7 +111,26 @@ class ProfileViewController: UIViewController, NetworkServiceDelegate{
         
         //Segmented Control
         guard let firstPage = pages.first else {return}
+        setupSegmentedControl()
         
+    }
+    
+    func setupSegmentedControl() {
+        segmentedControl.removeAllSegments()
+        segmentedControl.insertSegment(withTitle: "Tweets", at: 0, animated: false)
+        segmentedControl.insertSegment(withTitle: "Replies", at: 1, animated: false)
+        segmentedControl.insertSegment(withTitle: "Likes", at: 2, animated: false)
+        segmentedControl.selectedSegmentIndex = 0
+        segmentedControl.setTitleTextAttributes(normalTextAttributes, for: .normal)
+        segmentedControl.setTitleTextAttributes(selectedTextAttributes, for: .selected)
+        segmentedControl.layer.cornerRadius = 8
+        segmentedControl.layer.borderWidth = 1
+        segmentedControl.layer.borderColor = UIColor.gray.cgColor
+        segmentedControl.clipsToBounds = true
+        
+        
+        switchViewController(initialViewController)
+        segmentedControl.addTarget(self, action: #selector(handleChange(_:)), for: .valueChanged)
     }
     
     @IBAction func editClicked(_ sender: Any) {
@@ -150,17 +161,7 @@ class ProfileViewController: UIViewController, NetworkServiceDelegate{
     }
 
     func deleteAction(id: String) {
-        //API CALL
-        service.deleteEntry(documentId: id) { result, error in
-            if error != nil{
-                self.makeAlert(message: error!.localizedDescription)
-                return
-            }
-            if result == true{
-                self.makeAlert(message: "Deleted")
-                self.setupView()
-            }
-        }
+        viewModel.deleteEntry(documentId: id)
     }
     
     func didFetchData(_ data: [Entry]) {

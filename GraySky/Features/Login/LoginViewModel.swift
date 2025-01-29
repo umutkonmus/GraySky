@@ -1,71 +1,50 @@
 //
-//  LoginViewController.swift
+//  LoginViewModel.swift
 //  GraySky
 //
-//  Created by Umut Konmuş on 31.12.2024.
+//  Created by Umut Konmuş on 27.01.2025.
 //
 
-import UIKit
+import Foundation
 import FirebaseAuth
 import FirebaseFirestore
 import FirebaseStorage
 
-class LoginViewController: UIViewController {
-
-    @IBOutlet weak var emailText: UITextField!
-    @IBOutlet weak var passwordText: UITextField!
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        passwordText.isSecureTextEntry = true
-    }
+class LoginViewModel {
     
-    @IBAction func singInClicked(_ sender: Any) {
-        /*
-            Auth.auth().signIn(withEmail: emailText.text!, password: passwordText.text!) { authData, error in
-                if error != nil{
-                    self.makeAlert(message: error?.localizedDescription ?? "Can't login")
-                }
-                else{
-                    self.performSegue(withIdentifier: "toMainApp", sender: nil)
-                }
-            }*/
-        if emailText.text != "" && passwordText.text != "" {
-            singInOrCreateUser(email: emailText.text!,password: passwordText.text!)
-        }else{
-            makeAlert(message: "Email or password can not be empty")
-        }
-        
-    }
+    
+    weak var delegate: LoginViewModelDelegate?
+    var email: String = ""
     
     func singInOrCreateUser(email: String, password: String){
-        
-            
-        Auth.auth().signIn(withEmail: email, password: password) { (authResult, error) in
+        if email != "" && password != ""{
+            self.email = email
+            Auth.auth().signIn(withEmail: email, password: password) { (authResult, error) in
                 if let error = error {
-                    // Eğer hata varsa ve kullanıcı bulunamadıysa, yeni kullanıcı oluşturalım
+
                     if let authError = error as? NSError, authError.code == AuthErrorCode.invalidCredential.code.rawValue {
                         
                         self.createUser(email: email, password: password)
                         
                     } else {
                         // If not user not found error
-                        self.makeAlert(message: error.localizedDescription)
+                        self.delegate?.makeAlert(message: error.localizedDescription)
                     }
                 } else {
                     // User Exists
-                    self.performSegue(withIdentifier: "toMainApp", sender: nil)
+                    self.delegate?.logged()
                 }
             }
+        } else {
+            self.delegate?.makeAlert(message: "Lütfen email ve parolayı boş bırakmayınız.") }
+        }
         
-        
-    }
     
     func createUser(email: String, password: String) {
         Auth.auth().createUser(withEmail: email, password: password) { (authResult, error) in
             if let error = error {
                 
-                self.makeAlert(message: error.localizedDescription)
+                self.delegate?.makeAlert(message: error.localizedDescription)
                 
             } else {
                 
@@ -84,17 +63,17 @@ class LoginViewController: UIViewController {
         let userInfoData: [String: Any] = [
             "imageUrl": imageUrl,
             "name": "",
-            "username": emailText.text!
+            "username": self.email
         ]
         
         db.collection("UserInfo").document(userId).setData(userInfoData) { error in
             if let error = error {
-                self.makeAlert(message: "Veri eklenirken hata oluştu: \(error.localizedDescription)")
+                self.delegate?.makeAlert(message: "Veri eklenirken hata oluştu: \(error.localizedDescription)")
             } else {
                 // Successfulyy Uploaded
-                self.performSegue(withIdentifier: "toMainApp", sender: nil)
+                self.delegate?.logged()
             }
         }
     }
-    
 }
+

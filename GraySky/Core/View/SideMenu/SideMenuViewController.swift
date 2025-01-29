@@ -21,7 +21,8 @@ class SideMenuViewController: UIViewController {
     @IBOutlet weak var topicsButton: SideMenuButton!
     @IBOutlet weak var bookmarksButton: SideMenuButton!
     @IBOutlet weak var momentsButton: SideMenuButton!
-    var service = NetworkService()
+    let service = NetworkService()
+    
     weak var mainNavigationController: UINavigationController!
     
     init(mainNavigationController: UINavigationController) {

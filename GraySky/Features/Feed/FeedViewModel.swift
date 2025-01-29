@@ -8,18 +8,27 @@ import Foundation
 
 class FeedViewModel : NetworkServiceDelegate {
     
-    let view = FeedViewController()
+    weak var delegate: FeedViewModelDelegate?
+    let service = NetworkService()
+    
+    init() {
+        service.delegate = self
+    }
+    
+    func fetchData(){
+        service.fetchData()
+    }
     
     func didFetchData(_ data: [Entry]) {
-        <#code#>
+        delegate?.didFetchData(data)
     }
     
     func didFailWithError(_ error: any Error) {
-        <#code#>
+        delegate?.didFailWithError(error)
     }
     
-    func didFetchUser() {
-        <#code#>
+    func didFetchUser(user: User) {
+        delegate?.didFetchUser(user: user)
     }
     
     
