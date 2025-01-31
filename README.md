@@ -9,7 +9,6 @@ This project is the Swift code for the GraySky application. It is an application
 - Storyboard
 - Auto Layout
 - Google Firebase
-- API Call
 - Delegation Pattern
 - MVVM
 
