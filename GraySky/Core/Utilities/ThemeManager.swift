@@ -9,4 +9,5 @@ import UIKit
 
 struct ThemeManager {
     static let primaryColor = UIColor(hex: "4C9EEB")
+    static let secondaryColor = UIColor(hex: "687684")
 }

@@ -14,6 +14,10 @@ class ProfileViewModel : NetworkServiceDelegate{
         return ThemeManager.primaryColor
     }
     
+    var secondaryColor : UIColor {
+        return ThemeManager.secondaryColor
+    }
+    
     let service = NetworkService()
     
     init() {

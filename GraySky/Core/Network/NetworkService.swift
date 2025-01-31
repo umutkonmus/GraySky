@@ -20,6 +20,7 @@ class NetworkService : DataProvider{
     var username: String?
     var userImageUrl: String?
     var name: String?
+    var bannerUrl: String?
     
     var user: User?
     
@@ -39,13 +40,16 @@ class NetworkService : DataProvider{
                 self.username = snapshot.get("username") as? String
                 self.name = snapshot.get("name") as? String
                 self.userImageUrl = snapshot.get("imageUrl") as? String
-                
+                self.bannerUrl = snapshot.get("bannerUrl") as? String
+ 
                 if let uid = self.userUID {
                     if let name = self.name {
                         if let username = self.username {
-                            if let url = self.userImageUrl {
-                                self.user = User(UID: uid, Name: name, Username: username, ImageUrl: url, Biography: "", FollowerCount: 123, FollowingCount: 456, JoinDate: .now)
-                                self.delegate?.didFetchUser(user: self.user!)
+                            if let imageUrl = self.userImageUrl {
+                                if let bannerUrl = self.bannerUrl {
+                                    self.user = User(UID: uid, Name: name, Username: username, ImageUrl: imageUrl, BannerUrl: bannerUrl, Biography: "Hi, I'm an IOS Developer",Link:"github.com", FollowerCount: 123, FollowingCount: 456, JoinDate: .now)
+                                    self.delegate?.didFetchUser(user: self.user!)
+                                }
                             }
                         }
                     }
@@ -287,7 +291,7 @@ class NetworkService : DataProvider{
         }
     }
     
-    func editProfile(image :UIImage,username :String,completion: @escaping (Bool,Error?) -> Void) {
+    func editProfile(image: UIImage, username: String, name: String ,completion: @escaping (Bool,Error?) -> Void) {
         print("edit")
         let storageRef = Storage.storage().reference()
         
@@ -313,8 +317,11 @@ class NetworkService : DataProvider{
                 
                 let db = Firestore.firestore()
                 if let id = self.userUID {
-                    db.collection("UserInfo").document(id).setData(["imageUrl": downloadURL.absoluteString,
-                        "username": username]) { error in
+                    db.collection("UserInfo").document(id).setData([
+                        "imageUrl": downloadURL.absoluteString,
+                        "username": username,
+                        "name": name
+                    ]) { error in
                         if let error = error {
                             completion(false, error)
                         } else {

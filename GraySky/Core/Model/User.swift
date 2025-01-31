@@ -12,7 +12,9 @@ struct User {
     var Name : String
     var Username : String
     var ImageUrl : String
+    var BannerUrl : String
     var Biography : String
+    var Link : String
     var FollowerCount : Int
     var FollowingCount : Int
     var JoinDate : Date

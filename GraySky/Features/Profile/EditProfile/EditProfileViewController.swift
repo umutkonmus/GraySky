@@ -11,13 +11,15 @@ class EditProfileViewController: UIViewController,UIImagePickerControllerDelegat
 
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var usernameTextField: UITextField!
+    @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     var currentUsername: String?
+    var currentName: String?
     var currentImage: UIImage?
     var service = NetworkService()
     var isImageChanged: Bool = false
-    var isUsernameChanged: Bool = false
     var username: String!
+    var name: String!
     var editButton: UIButton!
     
     override func viewDidLoad() {
@@ -27,10 +29,12 @@ class EditProfileViewController: UIViewController,UIImagePickerControllerDelegat
         setupBarButton()
         imageView.image = currentImage
         usernameTextField.text = currentUsername
+        nameTextField.text = currentName
         let imageGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped))
         imageView.isUserInteractionEnabled = true
         imageView.addGestureRecognizer(imageGestureRecognizer)
         username = service.username
+        name = service.name
         addEditButton()
     }
     
@@ -55,11 +59,12 @@ class EditProfileViewController: UIViewController,UIImagePickerControllerDelegat
     }
     
     @objc func performEdit(){
-        isUsernameChanged = currentUsername != usernameTextField.text
+        let isUsernameChanged = currentUsername != usernameTextField.text
+        let isNameChanged = currentName != nameTextField.text
         //API CALL
-        if isImageChanged || isUsernameChanged{
+        if isImageChanged || isUsernameChanged || isNameChanged{
             activityIndicator.startAnimating()
-            service.editProfile(image: imageView.image!, username: (usernameTextField.text ?? service.username!)) { result, error in
+            service.editProfile(image: imageView.image!, username: (usernameTextField.text ?? service.username!), name: nameTextField.text ?? service.name!) { result, error in
                 self.activityIndicator.stopAnimating()
                 if error != nil {
                     self.makeAlert(message: error?.localizedDescription ?? "Error while editing profile")

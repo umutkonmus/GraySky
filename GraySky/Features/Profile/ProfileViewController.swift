@@ -12,14 +12,32 @@ class ProfileViewController: UIViewController, ProfileViewModelDelegate{
     
     private let viewModel = ProfileViewModel()
 
+    @IBOutlet weak var bannerImageView: UIImageView!
+    @IBOutlet weak var customSegmentedControl: UIView!
     @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var usernameLabel: UILabel!
+    @IBOutlet weak var bioLabel: UILabel!
+    @IBOutlet weak var linkLabel: UILabel!
+    @IBOutlet weak var calendarLabel: UILabel!
+    @IBOutlet weak var followingCountLabel: UILabel!
+    @IBOutlet weak var followersCountLabel: UILabel!
     //@IBOutlet weak var tableView : UITableView!
     @IBOutlet weak var editButton: UIButton!
     @IBOutlet weak var containerView: UIView!
-    @IBOutlet weak var segmentedControl: UISegmentedControl!
     
-    var data: [Entry] = []
+    private let twSegmentedControl: UISegmentedControl = {
+        let items = ["Tweets", "Replies", "Likes"]
+        let sc = UISegmentedControl(items: items)
+        sc.selectedSegmentIndex = 0
+        sc.selectedSegmentTintColor = .clear
+        sc.setTitleTextAttributes([.foregroundColor: ThemeManager.primaryColor, .font: UIFont.boldSystemFont(ofSize: 16)], for: .selected)
+        sc.setTitleTextAttributes([.foregroundColor: ThemeManager.secondaryColor, .font: UIFont.systemFont(ofSize: 16, weight: .semibold)], for: .normal)
+        sc.backgroundColor = .clear
+        sc.setBackgroundImage(UIImage(), for: .normal, barMetrics: .default)
+        sc.setBackgroundImage(UIImage(), for: .selected, barMetrics: .default)
+        return sc
+    }()
     
     var pageViewController : UIPageViewController?
     var currentIndex = 0
@@ -35,15 +53,6 @@ class ProfileViewController: UIViewController, ProfileViewModelDelegate{
         ]
     }()
     
-    let normalTextAttributes: [NSAttributedString.Key: Any] = [
-        .foregroundColor: UIColor.gray,
-        .font: UIFont.systemFont(ofSize: 16, weight: .regular)
-    ]
-    let selectedTextAttributes: [NSAttributedString.Key: Any] = [
-        .foregroundColor: UIColor.black,
-        .font: UIFont.systemFont(ofSize: 16, weight: .bold)
-    ]
-    
     override func viewWillAppear(_ animated: Bool) {
         setupView()
     }
@@ -55,11 +64,6 @@ class ProfileViewController: UIViewController, ProfileViewModelDelegate{
         
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         initialViewController = storyboard.instantiateViewController(withIdentifier: "PostsViewController")
-
-        /*
-        tableView.register(UINib(nibName: "TwitterTableViewCell", bundle: nil), forCellReuseIdentifier: "cell")
-        tableView.delegate = self
-        tableView.dataSource = self */
     }
     
     func switchViewController(_ viewController: UIViewController) {
@@ -94,43 +98,58 @@ class ProfileViewController: UIViewController, ProfileViewModelDelegate{
         switchViewController(selectedViewController)
     }
     
+    func getJoinedDateString(date: Date) -> String {
+        let calendar = Calendar.current
+        let year = calendar.component(.year, from: date)
+        let month = calendar.component(.month, from: date)
+        return "Joined \(month) \(year)"
+    }
+    
     
     func didFetchUser(user: User) {
-        usernameLabel.text = user.Username
+        nameLabel.text = user.Name
+        usernameLabel.text = "@\(user.Username)"
+        bioLabel.text = user.Biography
+        linkLabel.text = user.Link
+        calendarLabel.text = getJoinedDateString(date: user.JoinDate)
+        followersCountLabel.text = String(user.FollowerCount)
+        followingCountLabel.text = String(user.FollowingCount)
         imageView.sd_setImage(with: URL(string: user.ImageUrl))
+        bannerImageView.sd_setImage(with: URL(string: user.BannerUrl))
         viewModel.fetchData(with: user.UID)
         imageView.maskCircle()
     }
     
     func setupView(){
+        linkLabel.textColor = viewModel.primaryColor
+        calendarLabel.textColor = viewModel.secondaryColor
+        usernameLabel.textColor = viewModel.secondaryColor
+        
         //Edit Button
         editButton.tintColor = viewModel.primaryColor
         editButton.layer.borderColor = viewModel.primaryColor.cgColor
         editButton.layer.borderWidth = 1
-        editButton.layer.cornerRadius = editButton.frame.width / 5.8
+        editButton.layer.cornerRadius = editButton.frame.width / 6
         
-        //Segmented Control
-        guard let firstPage = pages.first else {return}
         setupSegmentedControl()
         
     }
     
     func setupSegmentedControl() {
-        segmentedControl.removeAllSegments()
-        segmentedControl.insertSegment(withTitle: "Tweets", at: 0, animated: false)
-        segmentedControl.insertSegment(withTitle: "Replies", at: 1, animated: false)
-        segmentedControl.insertSegment(withTitle: "Likes", at: 2, animated: false)
-        segmentedControl.selectedSegmentIndex = 0
-        segmentedControl.setTitleTextAttributes(normalTextAttributes, for: .normal)
-        segmentedControl.setTitleTextAttributes(selectedTextAttributes, for: .selected)
-        segmentedControl.layer.cornerRadius = 8
-        segmentedControl.layer.borderWidth = 1
-        segmentedControl.layer.borderColor = UIColor.gray.cgColor
-        segmentedControl.clipsToBounds = true
+        guard let _ = pages.first else {return}
         
+        customSegmentedControl.addSubview(twSegmentedControl)
+        
+        twSegmentedControl.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            twSegmentedControl.trailingAnchor.constraint(equalTo: customSegmentedControl.trailingAnchor),
+            twSegmentedControl.leadingAnchor.constraint(equalTo: customSegmentedControl.leadingAnchor),
+            twSegmentedControl.topAnchor.constraint(equalTo: customSegmentedControl.topAnchor),
+            twSegmentedControl.bottomAnchor.constraint(equalTo: customSegmentedControl.bottomAnchor)
+        ])
         
         switchViewController(initialViewController)
-        segmentedControl.addTarget(self, action: #selector(handleChange(_:)), for: .valueChanged)
+        twSegmentedControl.addTarget(self, action: #selector(handleChange), for: .valueChanged)
     }
     
     @IBAction func editClicked(_ sender: Any) {
@@ -141,7 +160,8 @@ class ProfileViewController: UIViewController, ProfileViewModelDelegate{
         if segue.identifier == "toEditView"{
             if let destination = segue.destination as? EditProfileViewController{
                 destination.currentImage = self.imageView.image
-                destination.currentUsername = self.usernameLabel.text
+                destination.currentUsername = self.viewModel.service.user?.Username
+                destination.currentName = self.nameLabel.text
             }
         }
     }
@@ -165,10 +185,6 @@ class ProfileViewController: UIViewController, ProfileViewModelDelegate{
     }
     
     func didFetchData(_ data: [Entry]) {
-        self.data = data
-        DispatchQueue.main.async {
-            //self.tableView.reloadData()
-        }
     }
     
     func didFailWithError(_ error: any Error) {

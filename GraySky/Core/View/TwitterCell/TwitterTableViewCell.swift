@@ -85,7 +85,9 @@ extension TwitterTableViewCell {
         self.documentId = entry.documentId
         usernameLabel.text = entry.userUsername
         nicknameLabel.text = "@\(entry.userName)"
+        nicknameLabel.textColor = ThemeManager.secondaryColor
         timeAgoLabel.text = "·\(entry.timeAgo)"
+        timeAgoLabel.textColor = ThemeManager.secondaryColor
         entryText.text = entry.userText
         userImage.sd_setImage(with: URL(string: entry.userImageUrl)!)
         isLiked = entry.isLiked
