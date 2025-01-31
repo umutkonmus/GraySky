@@ -38,6 +38,14 @@
 		60AAA199546DF7D545033581 /* Pods-GraySkyTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GraySkyTests.debug.xcconfig"; path = "Target Support Files/Pods-GraySkyTests/Pods-GraySkyTests.debug.xcconfig"; sourceTree = "<group>"; };
 		62B5612DB7A0BB878C1DC294 /* Pods-GraySky.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GraySky.release.xcconfig"; path = "Target Support Files/Pods-GraySky/Pods-GraySky.release.xcconfig"; sourceTree = "<group>"; };
 		8528B6C4790CDA793CD90E02 /* Pods_GraySky.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GraySky.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		854011232D4D81F90075324D /* Feed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Feed.png; sourceTree = "<group>"; };
+		854011242D4D81F90075324D /* Profile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Profile.png; sourceTree = "<group>"; };
+		854011252D4D81F90075324D /* Search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Search.png; sourceTree = "<group>"; };
+		854011262D4D81F90075324D /* Sidemenu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Sidemenu.png; sourceTree = "<group>"; };
+		854011282D4D81F90075324D /* Feed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Feed.png; sourceTree = "<group>"; };
+		854011292D4D81F90075324D /* Profile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Profile.png; sourceTree = "<group>"; };
+		8540112A2D4D81F90075324D /* Search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Search.png; sourceTree = "<group>"; };
+		8540112B2D4D81F90075324D /* Sidemenu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Sidemenu.png; sourceTree = "<group>"; };
 		85993C3C2D31D241004DE7E7 /* GraySky.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GraySky.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		85993C522D31D243004DE7E7 /* GraySkyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GraySkyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		85993C5C2D31D243004DE7E7 /* GraySkyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GraySkyUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -130,9 +138,41 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		854011272D4D81F90075324D /* DarkMode */ = {
+			isa = PBXGroup;
+			children = (
+				854011232D4D81F90075324D /* Feed.png */,
+				854011242D4D81F90075324D /* Profile.png */,
+				854011252D4D81F90075324D /* Search.png */,
+				854011262D4D81F90075324D /* Sidemenu.png */,
+			);
+			path = DarkMode;
+			sourceTree = "<group>";
+		};
+		8540112C2D4D81F90075324D /* LightMode */ = {
+			isa = PBXGroup;
+			children = (
+				854011282D4D81F90075324D /* Feed.png */,
+				854011292D4D81F90075324D /* Profile.png */,
+				8540112A2D4D81F90075324D /* Search.png */,
+				8540112B2D4D81F90075324D /* Sidemenu.png */,
+			);
+			path = LightMode;
+			sourceTree = "<group>";
+		};
+		8540112D2D4D81F90075324D /* Screenshots */ = {
+			isa = PBXGroup;
+			children = (
+				854011272D4D81F90075324D /* DarkMode */,
+				8540112C2D4D81F90075324D /* LightMode */,
+			);
+			path = Screenshots;
+			sourceTree = "<group>";
+		};
 		85993C332D31D241004DE7E7 = {
 			isa = PBXGroup;
 			children = (
+				8540112D2D4D81F90075324D /* Screenshots */,
 				85993D2C2D31D3E0004DE7E7 /* LICENSE.txt */,
 				85993D2D2D31D3E0004DE7E7 /* README.md */,
 				85993C3E2D31D241004DE7E7 /* GraySky */,
