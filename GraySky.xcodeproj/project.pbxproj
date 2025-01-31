@@ -46,6 +46,8 @@
 		854011292D4D81F90075324D /* Profile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Profile.png; sourceTree = "<group>"; };
 		8540112A2D4D81F90075324D /* Search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Search.png; sourceTree = "<group>"; };
 		8540112B2D4D81F90075324D /* Sidemenu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Sidemenu.png; sourceTree = "<group>"; };
+		8540112E2D4D82760075324D /* Login.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Login.png; sourceTree = "<group>"; };
+		8540112F2D4D82850075324D /* Login.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Login.png; sourceTree = "<group>"; };
 		85993C3C2D31D241004DE7E7 /* GraySky.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GraySky.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		85993C522D31D243004DE7E7 /* GraySkyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GraySkyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		85993C5C2D31D243004DE7E7 /* GraySkyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GraySkyUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -141,6 +143,7 @@
 		854011272D4D81F90075324D /* DarkMode */ = {
 			isa = PBXGroup;
 			children = (
+				8540112F2D4D82850075324D /* Login.png */,
 				854011232D4D81F90075324D /* Feed.png */,
 				854011242D4D81F90075324D /* Profile.png */,
 				854011252D4D81F90075324D /* Search.png */,
@@ -152,6 +155,7 @@
 		8540112C2D4D81F90075324D /* LightMode */ = {
 			isa = PBXGroup;
 			children = (
+				8540112E2D4D82760075324D /* Login.png */,
 				854011282D4D81F90075324D /* Feed.png */,
 				854011292D4D81F90075324D /* Profile.png */,
 				8540112A2D4D81F90075324D /* Search.png */,
