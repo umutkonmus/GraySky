@@ -41,10 +41,20 @@ After creating your Firebase project, you must set up the following structure in
     - likedBy: ["likedUID"] (array)
     - publisherUID: "userId" (string)
     - text: "EntryText" (string)
-- /UserImages
+    - comments: (array<(string)>)
+    - republishedBy: (array<(string)>)
+
+- /UserInfo
   - {userId} (document)
-    - username: "John Doe"
-    - imageUrl: "Firestore Image URL"
+    - username: "johnd" (string)
+    - name: "JohnDoe" (string)
+    - imageUrl: "Firestore Image URL" (string)
+    - bannerUrl: "Firestore Image URL" (string)
+    - biography: (string)
+    - followers: (array<(string)>)
+    - following: (array<(string)>)
+    - joinDate: (timestamp)
+
 ```
 
 ## Explanation
@@ -57,6 +67,8 @@ Each **entry** document will contain the following fields:
 - **likedBy**: An array containing the user IDs of people who liked the entry.
 - **publisherUID**: The publisher's user ID.
 - **text**: The content of the post (a string).
+- **comments**: Comments for this entry (comment count will be calculated from here).
+- **republishedBy**: Republishers for this entry (republisher count will be calculated from here).
 
 
 ## 3. Configure Firebase Security Rules
@@ -97,13 +109,14 @@ git clone https://github.com/umutkonmus/GraySky.git
 ### Feed
 ![Feed Dark 1](Screenshots/DarkMode/Feed.png) | ![Feed Light 1](Screenshots/LightMode/Feed.png)
 --- | ---
-![New Entry Dark 2](Screenshots/DarkMode/NewEntry.png) | ![New Entry Light 2](Screenshots/LightMode/NewEntry.png)
+
+### SideMenu
+![SideMenu Dark 1](Screenshots/DarkMode/Sidemenu.png) | ![SideMenu Light 1](Screenshots/LightMode/Sidemenu.png)
+--- | ---
 
 ### Profile
 ![Profile Dark 1](Screenshots/DarkMode/Profile.png) | ![Profile Light 1](Screenshots/LightMode/Profile.png)
 --- | ---
-![Edit Profile Dark 2](Screenshots/DarkMode/EditProfile.png) | ![Edit Profile Light 2](Screenshots/DarkMode/EditProfile.png)
-
 
 ## Contributing
 
