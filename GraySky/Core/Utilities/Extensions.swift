@@ -38,8 +38,13 @@ extension UIImageView {
     public func maskCircle() {
         self.layer.cornerRadius = self.frame.size.width / 2
         self.layer.borderWidth = 4
-        self.layer.borderColor = UIColor.white.cgColor
+        self.layer.borderColor = getBorderColor().cgColor
         self.clipsToBounds = true
+    }
+    func getBorderColor() -> UIColor {
+        return UIColor { traitCollection in
+                return traitCollection.userInterfaceStyle == .dark ? .black : .white
+            }
     }
 }
 

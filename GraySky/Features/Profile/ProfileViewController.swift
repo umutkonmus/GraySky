@@ -48,13 +48,17 @@ class ProfileViewController: UIViewController, ProfileViewModelDelegate{
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         return [
             storyboard.instantiateViewController(withIdentifier: "PostsViewController"),
-            storyboard.instantiateViewController(withIdentifier:"RepliesViewController"),
-            storyboard.instantiateViewController(withIdentifier:"LikesViewController")
+            storyboard.instantiateViewController(withIdentifier: "RepliesViewController"),
+            storyboard.instantiateViewController(withIdentifier: "LikesViewController")
         ]
     }()
     
     override func viewWillAppear(_ animated: Bool) {
         setupView()
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        imageView.layer.borderColor = imageView.getBorderColor().cgColor
     }
     
     override func viewDidLoad() {
@@ -99,10 +103,10 @@ class ProfileViewController: UIViewController, ProfileViewModelDelegate{
     }
     
     func getJoinedDateString(date: Date) -> String {
-        let calendar = Calendar.current
-        let year = calendar.component(.year, from: date)
-        let month = calendar.component(.month, from: date)
-        return "Joined \(month) \(year)"
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMM yyyy"
+        let joinedDate = dateFormatter.string(from: date)
+        return "Joined \(joinedDate)"
     }
     
     
@@ -129,7 +133,7 @@ class ProfileViewController: UIViewController, ProfileViewModelDelegate{
         editButton.tintColor = viewModel.primaryColor
         editButton.layer.borderColor = viewModel.primaryColor.cgColor
         editButton.layer.borderWidth = 1
-        editButton.layer.cornerRadius = editButton.frame.width / 6
+        editButton.layer.cornerRadius = 16
         
         setupSegmentedControl()
         

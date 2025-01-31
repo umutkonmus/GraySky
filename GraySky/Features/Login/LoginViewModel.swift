@@ -55,7 +55,12 @@ class LoginViewModel {
     }
     
     func addUserImageToFirestore(userId: String) {
-        print("User ID: \(userId)")
+        let bannerUrl = "https://firebasestorage.googleapis.com/v0/b/graysky-e3186.firebasestorage.app/o/media%2FPink%20Pastel%20Quotes%20Twitter%20Header.png?alt=media&token=85ec95c9-7c33-4697-8699-9aada36c33f5"
+        let biography = ""
+        let link = "github.com"
+        let followers = [String]()
+        let following = [String]()
+        
         let db = Firestore.firestore()
         
         let imageUrl = "https://firebasestorage.googleapis.com/v0/b/graysky-e3186.firebasestorage.app/o/media%2FC453330A-011D-41D3-9681-94C945A3E579.jpeg?alt=media&token=0347e80e-adaf-48ca-ac08-ba3f2b7a9ec4"
@@ -63,7 +68,13 @@ class LoginViewModel {
         let userInfoData: [String: Any] = [
             "imageUrl": imageUrl,
             "name": "",
-            "username": self.email
+            "username": self.email,
+            "bannerUrl": bannerUrl,
+            "biography": biography,
+            "link": link,
+            "followers": followers,
+            "following": following,
+            "joinDate": Date()
         ]
         
         db.collection("UserInfo").document(userId).setData(userInfoData) { error in

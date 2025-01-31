@@ -21,6 +21,11 @@ class NetworkService : DataProvider{
     var userImageUrl: String?
     var name: String?
     var bannerUrl: String?
+    var biography: String?
+    var link: String?
+    var followers: [String]?
+    var following: [String]?
+    var joinDate: Date?
     
     var user: User?
     
@@ -41,14 +46,41 @@ class NetworkService : DataProvider{
                 self.name = snapshot.get("name") as? String
                 self.userImageUrl = snapshot.get("imageUrl") as? String
                 self.bannerUrl = snapshot.get("bannerUrl") as? String
- 
+                self.biography = snapshot.get("biography") as? String
+                self.link = snapshot.get("link") as? String
+                self.followers = snapshot.get("followers") as? [String]
+                self.following = snapshot.get("following") as? [String]
+                let joinDate = snapshot.get("joinDate") as? Timestamp
+                self.joinDate = joinDate?.dateValue()
+                
                 if let uid = self.userUID {
                     if let name = self.name {
                         if let username = self.username {
                             if let imageUrl = self.userImageUrl {
                                 if let bannerUrl = self.bannerUrl {
-                                    self.user = User(UID: uid, Name: name, Username: username, ImageUrl: imageUrl, BannerUrl: bannerUrl, Biography: "Hi, I'm an IOS Developer",Link:"github.com", FollowerCount: 123, FollowingCount: 456, JoinDate: .now)
-                                    self.delegate?.didFetchUser(user: self.user!)
+                                    if let biography = self.biography {
+                                        if let link = self.link {
+                                            if let followersCount = self.followers?.count {
+                                                if let followingCount = self.following?.count {
+                                                    if let date = self.joinDate {
+                                                        self.user = User(
+                                                            UID: uid,
+                                                            Name: name,
+                                                            Username: username,
+                                                            ImageUrl: imageUrl,
+                                                            BannerUrl: bannerUrl,
+                                                            Biography: biography,
+                                                            Link:link,
+                                                            FollowerCount: followersCount,
+                                                            FollowingCount: followingCount,
+                                                            JoinDate: date
+                                                        )
+                                                        self.delegate?.didFetchUser(user: self.user!)
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }

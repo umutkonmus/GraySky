@@ -7,6 +7,7 @@
 
 import UIKit
 import SideMenu
+import FirebaseAuth
 
 final class FeedViewController: UIViewController, FeedViewModelDelegate{
 
@@ -78,6 +79,8 @@ final class FeedViewController: UIViewController, FeedViewModelDelegate{
         
         let profileBarButton = UIBarButtonItem(customView: profileButton)
         self.navigationItem.leftBarButtonItem = profileBarButton
+        
+        
     }
     
     @objc func backButtonClicked() {

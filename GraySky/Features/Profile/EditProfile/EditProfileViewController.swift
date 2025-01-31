@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class EditProfileViewController: UIViewController,UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
@@ -98,5 +99,25 @@ class EditProfileViewController: UIViewController,UIImagePickerControllerDelegat
     @objc func cancelEdit(){
         self.navigationController?.popViewController(animated: true)
     }
-
+    
+    @IBAction func signOutClicked(_ sender: Any) {
+        do{
+            try Auth.auth().signOut()
+            navigateToLoginScreen()
+        }catch let error{
+            makeAlert(message: error.localizedDescription)
+        }
+    }
+    
+    func navigateToLoginScreen() {
+        if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let loginVC = storyboard.instantiateViewController(withIdentifier: "LoginViewController")
+                
+                sceneDelegate.window?.rootViewController = UINavigationController(rootViewController: loginVC)
+                
+                UIView.transition(with: sceneDelegate.window!, duration: 0.3, options: .transitionCrossDissolve, animations: nil, completion: nil)
+            }
+    }
+    
 }
